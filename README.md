@@ -1,8 +1,7 @@
 # Oqs
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/oqs`. To experiment with that code, run `bin/console` for an interactive prompt.
+liboqs-ruby is the Ruby wrapper to the [Open Quantum Safe library](https://openquantumsafe.org). The native library was tested against the liboqs at [liboqs](https://github.com/open-quantum-safe/liboqs)
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -18,26 +17,107 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install oqs
+    $ gem install liboqs-ruby
 
 ## Usage
 
-TODO: Write usage instructions here
+OQS mainly only has two group of functions: Key Encapsulation Mechanism (KEM) and Signature (SIG). 
 
-## Development
+Therefore the Ruby wrapper abstraction is following the liboqs C version as baseline. 
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Key Encapsulation Mechanism (KEM)
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+For KEM, the API is simple:
 
-## Contributing
+1. List all supported KEM PQ algorithms - PQ algorithms can be enable or disabled at compile time so it all depends on the liboqs native library. This API listed down the algorithms which are *supported* as reported by the native library. If you're using your own version of the library, you might have different output. 
+```ruby
+require 'oqs'
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/oqs. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/oqs/blob/master/CODE_OF_CONDUCT.md).
+supported_algo = Oqs::KEM.supported_kem_algo
+supported_algo.each do |al|
+  # al is the algorithm name (string) which is required by subsequent API
+  ...
+end
+```
+
+2. Generate keypair
+```ruby
+require 'oqs'
+
+ntru = Oqs::KEM.new('NTRU-HPS-4096-821')
+pubKey, secretKey = ntru.genkeypair
+# note pubKey and secretKey (or private key) is Fiddle::Pointer type and is required to be used by the C API in the subsequent phase
+```
+
+3. Key encapsulation - KEM is meant for key encapsulation which similar with Diffie-Hellman kind of key exchange
+```ruby
+require 'oqs'
+
+sessionKey, cipher = ntru.derive_encapsulation_key(pubKey)
+# cipher is required to be sent to recipient end to re-generate the sessionKey at recipient end.
+# Returned sessionKey is meant to convert into the final AES (or any other symmetric key) for the actual data encryption
+```
+
+4. Key decapsulation - Re-generate the session key from the private key
+```ruby
+require 'oqs'
+
+sessionKey = ntru.derive_decapsulation_key(cipher, secretKey)
+# cipher is given by sender and privKey is the recipient own private key
+```
+
+The idea is the sessionKey from derive\_encapsulation\_key() shall be same as the sessionKey from derive\_decapsulation\_key(). That session key shall be the AES key (any other symmetric key) for the data encryption.
+
+
+### Signature mechanism
+
+Signature mechanism is similar with KEM.
+
+1. List all supported Signature PQ algorithms - It is same as KEM as algorithm can be turned on or off during compile time 
+```ruby
+require 'oqs'
+
+supported_algo = Oqs::SIG.supported_signature_algo
+supported_algo.each do |al|
+  # al is the algorithm name (string) which is required by subsequent API
+  ...
+end
+```
+
+2. Generate keypair
+```ruby
+require 'oqs'
+
+dili = Oqs::SIG.new('Dilithium5')
+pubKey, secretKey = dili.genkeypair
+# note pubKey and secretKey (or private key) is Fiddle::Pointer type 
+```
+
+3. Generate data signature 
+```ruby
+require 'oqs'
+
+# sign data using sender secretKey/private key
+signature = dili.sign("this is message", secretKey)
+```
+
+4. Verify data signature
+```ruby
+require 'oqs'
+
+# verify signature with given data using sender public key
+res = dili.verify("this is message", signature, pubKey)
+# res is boolean to indicate the signature verification is passed or failed
+```
+
+spec folder has the necessary API example usage.
+
+## Development Environment
+
+The source code was tested on 
+* Ruby MRI 3.0.2p107 (2021-07-07 revision 0db68f0233) [x86\_64-linux], Linux Mint 20.2 x86\_64, Kernel 5.4.0-81-generic, CMake version 3.16.3, Ninja 1.10.0
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-## Code of Conduct
-
-Everyone interacting in the Oqs project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/oqs/blob/master/CODE_OF_CONDUCT.md).
