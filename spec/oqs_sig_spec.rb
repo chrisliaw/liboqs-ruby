@@ -11,24 +11,37 @@ RSpec.describe Oqs do
 
     expect { Oqs::SIG.new("random") }.to raise_exception(Oqs::Error)
 
+    puts "Found #{algos.length} supported SIG algo"
+    p algos
+
     algos.each do |al|
 
-      puts "Testing PQ signing algo #{al}"
+      begin
+        puts "Testing PQ signing algo #{al}"
 
-      sig = Oqs::SIG.new(al)
-      pubKey, privKey = sig.genkeypair
-      expect(pubKey).not_to be_nil
-      expect(privKey).not_to be_nil
+        sig = Oqs::SIG.new(al)
+        pubKey, privKey = sig.genkeypair
+        expect(pubKey).not_to be_nil
+        expect(privKey).not_to be_nil
 
-      message = " this is super message reuqires signing "
-      sign = sig.sign(message, privKey)
-      puts "Signature output : #{sign.length}"
-      expect(sign).not_to be_nil
+        message = " this is super message reuqires signing "
+        sign = sig.sign(message, privKey)
+        puts "Signature output : #{sign.length}"
+        expect(sign).not_to be_nil
 
-      res = sig.verify(message, sign, pubKey)
-      expect(res).to be true
+        res = sig.verify(message, sign, pubKey)
+        expect(res).to be true
 
-      expect(sig.verify("whatever", sign, pubKey)).to be false
+        expect(sig.verify("whatever", sign, pubKey)).to be false
+
+        sig.free(pubKey)
+        sig.free(privKey)
+        sig.cleanup
+
+      rescue Exception => ex
+        STDERR.puts "Algo '#{al}' getting error result"
+        STDERR.puts ex.message
+      end
 
     end
     
