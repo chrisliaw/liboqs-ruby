@@ -122,7 +122,8 @@ spec folder has the necessary API example usage.
 ## Development Environment
 
 The source code was tested on 
-* Ruby MRI 3.0.2p107 (2021-07-07 revision 0db68f0233) [x86\_64-linux], Linux Mint 20.2 x86\_64, Kernel 5.4.0-81-generic, CMake version 3.16.3, Ninja 1.10.0
+* Linux: Ruby MRI 3.0.2p107 (2021-07-07 revision 0db68f0233) [x86\_64-linux], Linux Mint 20.2 x86\_64, Kernel 5.4.0-81-generic, CMake version 3.16.3, Ninja 1.10.0
+* MacOS: Ruby MRI 3.0.1p64 (2021-04-05 revision 0fb782ee38) [x86\_64-darwin20], Mac OS BigSur 11.5, QuadCore Intel Core i7, CMake version 3.21.1, 1.10.2
 
 ## License
 
