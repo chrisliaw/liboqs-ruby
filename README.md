@@ -58,7 +58,8 @@ require 'oqs'
 
 sessionKey, cipher = ntru.derive_encapsulation_key(pubKey)
 # cipher is required to be sent to recipient end to re-generate the sessionKey at recipient end.
-# Returned sessionKey is meant to convert into the final AES (or any other symmetric key) for the actual data encryption
+# Returned sessionKey is meant to convert into the final AES (or any other symmetric key) 
+# for the actual data encryption
 ```
 
 4. Key decapsulation - Re-generate the session key from the private key
