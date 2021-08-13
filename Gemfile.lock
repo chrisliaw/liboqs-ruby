@@ -1,17 +1,32 @@
 PATH
   remote: .
   specs:
-    oqs (0.1.0)
+    liboqs (0.1.0)
       tlogger
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    devops_helper (0.3.1)
+      git_cli (>= 0.6.0)
+      gvcs (>= 0.1.0)
+      tlogger (>= 0.22.0)
+      toolrack (>= 0.4.0)
+      tty-prompt (= 0.22.0)
     diff-lcs (1.4.4)
+    git_cli (0.8.0)
+      gvcs (>= 0.1.0)
+      ptools (~> 1.4.0)
+      tlogger (>= 0.21)
+      toolrack (>= 0.4.0)
+    gvcs (0.1.0)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    ptools (1.4.2)
     rainbow (3.0.0)
     rake (13.0.6)
     regexp_parser (2.1.1)
@@ -42,13 +57,27 @@ GEM
       parser (>= 3.0.1.1)
     ruby-progressbar (1.11.0)
     tlogger (0.25.0)
+    toolrack (0.6.0)
+      tlogger (~> 0.21)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.22.0)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
     unicode-display_width (2.0.0)
+    wisper (2.0.1)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  oqs!
+  devops_helper
+  liboqs!
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.7)
