@@ -1,4 +1,4 @@
-# Oqs
+# liboqs-ruby
 
 liboqs-ruby is the Ruby wrapper to the [Open Quantum Safe library](https://openquantumsafe.org). The native library was tested against the liboqs at [liboqs](https://github.com/open-quantum-safe/liboqs)
 
