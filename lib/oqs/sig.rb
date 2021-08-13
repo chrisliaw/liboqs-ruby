@@ -33,7 +33,7 @@ module Oqs
    end
 
    def free(obj)
-     obj.free if not obj.nil and obj.null?
+     obj.free if not (obj.nil? and obj.null?)
    end
 
    def intrinsic_name
