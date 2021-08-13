@@ -10,5 +10,3 @@
 # rspec failure tracking
 .rspec_status
 
-# for source code better exclude this
-/native
