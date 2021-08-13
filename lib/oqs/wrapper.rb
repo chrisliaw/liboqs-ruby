@@ -20,7 +20,7 @@ module Oqs
           :linux
         elsif plat =~ /darwin/
           :macos
-        elsif plat =~ /win/
+        elsif plat =~ /mingw/
           :windows
         else
           raise WrapperError, "Unknown platform detected. [#{plat}]"
