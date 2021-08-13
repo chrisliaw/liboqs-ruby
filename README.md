@@ -46,7 +46,10 @@ require 'oqs'
 
 ntru = Oqs::KEM.new('NTRU-HPS-4096-821')
 pubKey, secretKey = ntru.genkeypair
-# note pubKey and secretKey (or private key) is Fiddle::Pointer type and is required to be used by the C API in the subsequent phase
+# note pubKey and secretKey (or private key) is Fiddle::Pointer type and 
+# is required to be used by the C API in the subsequent phase.
+# Note that pubKey and secretKey are required to be free manually
+# Refer spec file for usage
 ```
 
 3. Key encapsulation - KEM is meant for key encapsulation which similar with Diffie-Hellman kind of key exchange
@@ -90,7 +93,10 @@ require 'oqs'
 
 dili = Oqs::SIG.new('Dilithium5')
 pubKey, secretKey = dili.genkeypair
-# note pubKey and secretKey (or private key) is Fiddle::Pointer type 
+# note pubKey and secretKey (or private key) is Fiddle::Pointer type and 
+# is required to be used by the C API in the subsequent phase.
+# Note that pubKey and secretKey are required to be free manually
+# Refer spec file for usage
 ```
 
 3. Generate data signature 
